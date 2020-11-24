@@ -7,17 +7,25 @@ function App() {
   const generatePdf = () => {
     // Take screenshot using Html2Canvas
     html2canvas(document.getElementById("target")).then(function (canvas) {
+      // Let's take the width and height of the canvas so we can set it as the dimensions of the pdf document
       var width = canvas.width;
       var height = canvas.height;
+
+      // Transform these dimentions from pixels to millimeters
       var millimeters = {};
       millimeters.width = Math.floor(width * 0.264583);
       millimeters.height = Math.floor(height * 0.264583);
 
+      // Create a new variable using toDataURL method
       const imgData = canvas.toDataURL("image/png");
 
+      // Create a jsPDF object --> parameters "l" for landscape mode, "mm" for millimeters, and then we pass an array with the width and height calculated before.
       const doc = new jsPDF("l", "mm", [millimeters.width, millimeters.height]);
 
+      // We add the image to the pdf document, and set "0,0" for X and Y starting points
       doc.addImage(imgData, "PNG", 0, 0);
+
+      // Then save the document
       doc.save("Test.pdf");
     });
   };
